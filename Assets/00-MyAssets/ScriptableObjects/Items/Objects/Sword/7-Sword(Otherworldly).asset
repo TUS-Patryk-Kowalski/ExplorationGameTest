@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1fcb508dea08ca4aaaa13fb14775aa6, type: 3}
+  m_Name: 7-Sword(Otherworldly)
+  m_EditorClassIdentifier: 
+  itemName: Sword
+  itemDescription: Sharp and ready to face your foes head on!
+  itemSprite: {fileID: -1834437991, guid: c7f75a38b0a58214eaae2eb43025424f, type: 3}
+  itemRarity: 7
+  isStackable: 0
