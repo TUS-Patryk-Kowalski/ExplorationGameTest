@@ -25,4 +25,5 @@ public class ItemSO : ScriptableObject
     [Space]
     [Header("Item Settings")]
     public bool isStackable;
+    public float itemMass;
 }

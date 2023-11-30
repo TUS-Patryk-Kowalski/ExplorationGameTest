@@ -14,10 +14,14 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         if (Instance == null)
+        {
             Instance = this;
+        }
         else
+        {
             Destroy(gameObject);
-
+        }
+            
         player = GameObject.FindWithTag("Player");
         cameraPoint = GameObject.Find("PlayerFollowCamera");
     }

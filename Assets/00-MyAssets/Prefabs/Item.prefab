@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7746342036230442168}
-  - component: {fileID: 7746342036230442171}
+  - component: {fileID: 6613020719527749078}
   - component: {fileID: 7746342036230442174}
   - component: {fileID: 7746342036230442169}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,19 +36,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &7746342036230442171
+--- !u!135 &6613020719527749078
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7746342036230442170}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 69e185c4633a6bd40a3403717dc42eb0, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.3
+  m_Center: {x: 0, y: -0.2, z: 0}
 --- !u!54 &7746342036230442174
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -78,7 +78,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemSO: {fileID: 0}
-  disableDistance: 48
+  spriteDisableDistance: 32
+  lightDisableDistance: 12
+  physicsDisableDistance: 96
   bobbingHeight: 0.2
   bobbingSpeed: 1
   bobbingSpeedOffset: 0.5
