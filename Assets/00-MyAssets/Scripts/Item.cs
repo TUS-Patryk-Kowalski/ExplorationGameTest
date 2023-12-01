@@ -16,6 +16,12 @@ public class Item : MonoBehaviour
     public float bobbingHeight = 0.2f;
     public float bobbingSpeed = 2f, bobbingSpeedOffset = 0.5f;
 
+    private int _quantityOnGround = 1;
+    public int quantityOnGround
+    {
+        get { return _quantityOnGround; }
+    }
+
     private void OnEnable()
     {
         // 1. Get components

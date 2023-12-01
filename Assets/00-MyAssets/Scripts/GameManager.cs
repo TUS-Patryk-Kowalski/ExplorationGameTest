@@ -8,6 +8,11 @@ public class InventoryItemData
 {
     public ItemSO itemInSlot;
     private int quantity;
+
+    public void AddToSlot(int amount)
+    {
+        quantity += amount;
+    }
 }
 
 public class GameManager : MonoBehaviour
@@ -21,9 +26,9 @@ public class GameManager : MonoBehaviour
     public Sprite missingSprite;
     public Color common, uncommon, rare, epic, legendary, mythic, otherworldly;
 
+    private List<InventoryItemData> _toolbarSlots = new List<InventoryItemData>();
     private List<InventoryItemData> _inventorySlots = new List<InventoryItemData>();
     private bool _freeSlotsAvailable;
-    private List<int> _freeSlotIndexes;
 
     private void Awake()
     {
@@ -40,22 +45,39 @@ public class GameManager : MonoBehaviour
         cameraPoint = GameObject.Find("PlayerFollowCamera");
     }
 
-    public void AddItemToInventory(ItemSO itemToAdd)
+    public void AddItemToInventory(ItemSO itemSOToAdd, Item itemToAdd)
     {
         CheckForFreeSlots();
 
+        // If there are free slots available
         if (_freeSlotsAvailable)
         {
-            if (!itemToAdd.isStackable)
+            if (!itemSOToAdd.isStackable)
             {
-                // Add the item to a free inventory slot
+                foreach (InventoryItemData inventorySlot in _inventorySlots)
+                {
+                    if (inventorySlot.itemInSlot == null)
+                        inventorySlot.itemInSlot = itemSOToAdd;
+                        break;
+                }
+
                 CheckForFreeSlots(); // or directly remove the index of the slot from the list
             }
             else
             {
-                // Look through inventory list to see if the item is there,
-                // if found increnemt the count by 1
-                // if not found, add it to a free slot
+                foreach (InventoryItemData inventorySlot in _inventorySlots)
+                {
+                    // Look for the item in the inventory
+                    if (inventorySlot.itemInSlot == itemSOToAdd)
+                    {
+                        // if found increnemt the count by amount in the ground stack
+                        inventorySlot.AddToSlot(itemToAdd.quantityOnGround);
+                        break;
+                    }
+                    
+                    // if not found, add it to a free slot
+                }
+
                 CheckForFreeSlots(); // or directly remove the index of the slot from the list
             }
         }
