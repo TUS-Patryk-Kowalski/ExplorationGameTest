@@ -4,25 +4,26 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    public void AddItemToInventory(ItemSO itemSOToAdd, Item itemToAdd)
+    public void AddItemToInventory(Item itemToAdd)
     {
         CheckForFreeSlots();
 
         // If there are free slots available
         if (GameManager.Instance.freeSlotsAvailable)
         {
-            if (!itemSOToAdd.isStackable)
+            ItemSO itemSO = itemToAdd.GetComponent<Item>().itemSO;
+            if (!itemSO.isStackable)
             {
                 foreach (InventoryItemData inventorySlot in GameManager.Instance.inventorySlots)
                 {
                     if (inventorySlot.itemInSlot == null)
                     {
-                        inventorySlot.itemInSlot = itemSOToAdd;
+                        inventorySlot.itemInSlot = itemSO;
                         // not working at the moment
-                        //Debug.Log("function called");
-                        //Destroy(itemToAdd.gameObject);
+                        Debug.Log("function called");
+                        Destroy(itemToAdd.gameObject);
+                        break;
                     }
-                    break;
                 }
 
                 CheckForFreeSlots(); // or directly remove the index of the slot from the list
@@ -32,13 +33,12 @@ public class InventoryManager : MonoBehaviour
                 foreach (InventoryItemData inventorySlot in GameManager.Instance.inventorySlots)
                 {
                     // Look for the item in the inventory
-                    if (inventorySlot.itemInSlot == itemSOToAdd)
+                    if (inventorySlot.itemInSlot == itemSO)
                     {
                         // if found increnemt the count by amount in the ground stack
                         inventorySlot.AddToSlot(itemToAdd.quantityInStack);
                         break;
                     }
-
                     // if not found, add it to a free slot
                 }
 

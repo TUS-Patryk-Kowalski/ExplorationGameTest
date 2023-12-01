@@ -46,15 +46,13 @@ public class GameManager : MonoBehaviour
 
     [Space]
     [Header("Inventory")]
-    public bool freeSlotsAvailable;
+    public InventoryManager inventoryManager;
+    public bool freeSlotsAvailable = true;
     [SerializeField]
     private List<InventoryItemData> _toolbarSlots = new List<InventoryItemData>();
-    [SerializeField]
-    private List<InventoryItemData> _inventorySlots = new List<InventoryItemData>();
-    public List<InventoryItemData> inventorySlots 
-    {
-        get { return _inventorySlots; }
-    }
+    
+    public List<InventoryItemData> inventorySlots = new List<InventoryItemData>();
+
 
     private void Awake()
     {
@@ -69,6 +67,7 @@ public class GameManager : MonoBehaviour
             
         player = GameObject.FindWithTag("Player");
         cameraPoint = GameObject.Find("PlayerFollowCamera");
+        inventoryManager = gameObject.GetComponent<InventoryManager>();
     }
 
     private void Update()
