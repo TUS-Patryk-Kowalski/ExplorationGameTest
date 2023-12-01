@@ -19,16 +19,42 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    [Space]
+    [Header("Object references")]
     public GameObject player;
-
     public GameObject cameraPoint;
 
-    public Sprite missingSprite;
-    public Color common, uncommon, rare, epic, legendary, mythic, otherworldly;
+    public Vector3 cameraDirection;
 
+    [Space]
+    [Header("Defaults in case of errors")]
+    public Sprite missingSprite;
+
+    [Space]
+    [Header("Item Rarity Colours")]
+    public Color common;
+    public Color uncommon;
+    public Color rare;
+    public Color epic;
+    public Color legendary;
+    public Color mythic;
+    public Color otherworldly;
+
+    [Space]
+    [Header("Global Item Settings")]
+    public ItemSettingsSO settingsSO;
+
+    [Space]
+    [Header("Inventory")]
+    public bool freeSlotsAvailable;
+    [SerializeField]
     private List<InventoryItemData> _toolbarSlots = new List<InventoryItemData>();
+    [SerializeField]
     private List<InventoryItemData> _inventorySlots = new List<InventoryItemData>();
-    private bool _freeSlotsAvailable;
+    public List<InventoryItemData> inventorySlots 
+    {
+        get { return _inventorySlots; }
+    }
 
     private void Awake()
     {
@@ -45,52 +71,20 @@ public class GameManager : MonoBehaviour
         cameraPoint = GameObject.Find("PlayerFollowCamera");
     }
 
-    public void AddItemToInventory(ItemSO itemSOToAdd, Item itemToAdd)
+    private void Update()
     {
-        CheckForFreeSlots();
-
-        // If there are free slots available
-        if (_freeSlotsAvailable)
-        {
-            if (!itemSOToAdd.isStackable)
-            {
-                foreach (InventoryItemData inventorySlot in _inventorySlots)
-                {
-                    if (inventorySlot.itemInSlot == null)
-                        inventorySlot.itemInSlot = itemSOToAdd;
-                        break;
-                }
-
-                CheckForFreeSlots(); // or directly remove the index of the slot from the list
-            }
-            else
-            {
-                foreach (InventoryItemData inventorySlot in _inventorySlots)
-                {
-                    // Look for the item in the inventory
-                    if (inventorySlot.itemInSlot == itemSOToAdd)
-                    {
-                        // if found increnemt the count by amount in the ground stack
-                        inventorySlot.AddToSlot(itemToAdd.quantityOnGround);
-                        break;
-                    }
-                    
-                    // if not found, add it to a free slot
-                }
-
-                CheckForFreeSlots(); // or directly remove the index of the slot from the list
-            }
-        }
+        cameraDirection = player.transform.eulerAngles;
     }
-
-    public void CheckForFreeSlots()
+    // if something fails on an item, use this function-
+    // to make the object easier to locate in-game
+    public IEnumerator FlashRed(Light light)
     {
-        foreach(InventoryItemData inventorySlot in _inventorySlots)
+        while (true)
         {
-            // check each slot to see if it is free
-            // if slot is free and not in free slot list, add index to free slot list
-            // if slot is not free and in the free slot list, remove its idex from the list
-            // Suggestion 
+            light.color = Color.red;
+            yield return new WaitForSeconds(0.2f);
+            light.color = Color.black;
+            yield return new WaitForSeconds(0.2f);
         }
     }
 }

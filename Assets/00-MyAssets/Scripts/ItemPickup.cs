@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class ItemPickup : MonoBehaviour
 {
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+    /*
+    private void OnTriggerEnter(Collider other)
     {
-        if (hit.gameObject.CompareTag("Item"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Item"))
         {
-            // Item Pickup Logic
+            Debug.Log("Hit an Item");
+            Item item = other.gameObject.GetComponent<Item>();
+            if (item != null) { Debug.Log("Got the Item component"); }
+            GameManager.Instance.AddItemToInventory(item.itemSO, item);
         }
     }
+    */
 }

@@ -1,25 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class Item : MonoBehaviour
 {
     public ItemSO itemSO;
-    public float spriteDisableDistance = 48f, lightDisableDistance = 24f, physicsDisableDistance = 64f;
-
+    public ItemSettingsSO settingsSO;
+    [Space]
     private Collider _itemCollider;
     private Rigidbody _itemRB;
     private SpriteRenderer _itemSR;
     private Light _itemLight;
-
+    [Space]
     public float bobbingHeight = 0.2f;
     public float bobbingSpeed = 2f, bobbingSpeedOffset = 0.5f;
-
-    private int _quantityOnGround = 1;
-    public int quantityOnGround
+    [Space]
+    private int _quantityInStack = 1;
+    public int quantityInStack
     {
-        get { return _quantityOnGround; }
+        get { return _quantityInStack; }
     }
 
     private void OnEnable()
@@ -46,7 +45,7 @@ public class Item : MonoBehaviour
         {
             Debug.LogWarning($"ScriptableObject is missing on the item {gameObject.name}!");
             _itemSR.sprite = GameManager.Instance.missingSprite;
-            StartCoroutine(FlashRed(_itemLight));
+            StartCoroutine(GameManager.Instance.FlashRed(_itemLight));
             return;
         }
 
@@ -57,7 +56,7 @@ public class Item : MonoBehaviour
         if (itemSO.itemSprite == null)
         {
             Debug.LogWarning($"Item sprite is missing in the ScriptableObject for the item: {gameObject.name}!");
-            StartCoroutine(FlashRed(_itemLight));
+            StartCoroutine(GameManager.Instance.FlashRed(_itemLight));
         }
 
         SetLightColourBasedOnRarity();
@@ -70,27 +69,10 @@ public class Item : MonoBehaviour
         if (lightEnabled) { AdjustLightIntensity();}
     }
 
-    // if something fails on an item, use this function-
-    // to make the object easier to locate in-game
-    private IEnumerator FlashRed(Light light)
-    {
-        while (true)
-        {
-            light.color = Color.red;
-            yield return new WaitForSeconds(0.2f);
-            light.color = Color.black;
-            yield return new WaitForSeconds(0.2f);
-        }
-    }
-
     // Trun the sprite of the item to always face the camera
     private void SpriteFacePlayer()
     {
-        Vector3 directionToCamera = GameManager.Instance.cameraPoint.transform.position - transform.position;
-
-        directionToCamera = -directionToCamera;
-        directionToCamera.y = 0;
-        _itemSR.transform.forward = directionToCamera;
+        _itemSR.transform.eulerAngles = GameManager.Instance.cameraDirection;
     }
 
     // The item sprite bobs up and down slowly
@@ -113,9 +95,9 @@ public class Item : MonoBehaviour
     {
         float distanceToPlayer = Vector3.Distance(GameManager.Instance.player.transform.position, transform.position);
 
-        spriteEnabled = distanceToPlayer <= spriteDisableDistance;
-        lightEnabled = distanceToPlayer <= lightDisableDistance;
-        physicsEnabled = distanceToPlayer <= physicsDisableDistance;
+        spriteEnabled = distanceToPlayer <= GameManager.Instance.settingsSO.spriteRenderDistance;
+        lightEnabled = distanceToPlayer <= GameManager.Instance.settingsSO.lightRenderDistance;
+        physicsEnabled = distanceToPlayer <= GameManager.Instance.settingsSO.physicsActiveDistance;
 
         if (_itemSR != null) _itemSR.gameObject.SetActive(spriteEnabled);
         if (_itemLight != null) _itemLight.gameObject.SetActive(lightEnabled);
@@ -151,7 +133,7 @@ public class Item : MonoBehaviour
                 break;
             default:
                 Debug.LogWarning($"Item rarity Not Set for {gameObject.name}!");
-                StartCoroutine(FlashRed(_itemLight));
+                StartCoroutine(GameManager.Instance.FlashRed(_itemLight));
                 break;
         }
     }
@@ -164,13 +146,19 @@ public class Item : MonoBehaviour
         float distanceToPlayer = Vector3.Distance(GameManager.Instance.player.transform.position, transform.position);
 
         // Check if the player is within active range of the light
-        if (distanceToPlayer <= lightDisableDistance)
+        if (distanceToPlayer <= GameManager.Instance.settingsSO.lightRenderDistance)
         {
             // Calculate a normalized value (0 to 1) based on the player's distance
-            float normalizedDistance = distanceToPlayer / lightDisableDistance;
+            float normalizedDistance = distanceToPlayer / GameManager.Instance.settingsSO.lightRenderDistance;
 
             // Interpolate the light's intensity from its maximum value to 0
             _itemLight.intensity = Mathf.Lerp(startingLightIntensity, 0, normalizedDistance);
         }
+    }
+
+    private void MergeItemStacks()
+    {
+        // when items of the same type are near each other (dont forget about rarity), merge them to save performance
+        // Eah item has a quantity vriables
     }
 }
