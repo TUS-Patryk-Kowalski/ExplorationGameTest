@@ -24,7 +24,9 @@ public class GameManager : MonoBehaviour
     public GameObject player;
     public GameObject cameraPoint;
 
-    public Vector3 cameraDirection;
+    [Space]
+    [Header("Component references")]
+    public InventoryManager inventoryManager;
 
     [Space]
     [Header("Defaults in case of errors")]
@@ -44,15 +46,11 @@ public class GameManager : MonoBehaviour
     [Header("Global Item Settings")]
     public ItemSettingsSO settingsSO;
 
-    [Space]
-    [Header("Inventory")]
-    public InventoryManager inventoryManager;
-    public bool freeSlotsAvailable = true;
-    [SerializeField]
-    private List<InventoryItemData> _toolbarSlots = new List<InventoryItemData>();
-    
-    public List<InventoryItemData> inventorySlots = new List<InventoryItemData>();
-
+    private Vector3 _cameraDirection;
+    public Vector3 cameraDirection
+    {
+        get { return _cameraDirection; }
+    }
 
     private void Awake()
     {
@@ -72,7 +70,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        cameraDirection = player.transform.eulerAngles;
+        _cameraDirection = player.transform.eulerAngles;
     }
     // if something fails on an item, use this function-
     // to make the object easier to locate in-game

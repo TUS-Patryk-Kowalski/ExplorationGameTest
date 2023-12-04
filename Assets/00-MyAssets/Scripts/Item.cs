@@ -49,7 +49,7 @@ public class Item : MonoBehaviour
             return;
         }
 
-        // Set the sprite                 if true set itemSO's sprite | if false get fallback sprite
+        // Set the sprite                  if true set itemSO's sprite | if false get fallback sprite
         _itemSR.sprite = itemSO.itemSprite != null ? itemSO.itemSprite : GameManager.Instance.missingSprite;
 
         // If itemSO is assigned but has no sprite variable assigned... do:
@@ -64,7 +64,7 @@ public class Item : MonoBehaviour
 
     private void FixedUpdate()
     {
-        DistanceCulling();
+        PerformDistanceCulling();
         if (spriteEnabled) { SpriteFacePlayer(); BobbingMotion();}
         if (lightEnabled) { AdjustLightIntensity();}
     }
@@ -91,7 +91,7 @@ public class Item : MonoBehaviour
     private bool spriteEnabled;
     private bool lightEnabled;
     private bool physicsEnabled;
-    private void DistanceCulling()
+    private void PerformDistanceCulling()
     {
         float distanceToPlayer = Vector3.Distance(GameManager.Instance.player.transform.position, transform.position);
 

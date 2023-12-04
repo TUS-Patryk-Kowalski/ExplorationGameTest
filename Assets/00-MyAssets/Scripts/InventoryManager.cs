@@ -4,52 +4,32 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
+    public bool freeSlotsAvailable = true;
+
+    public List<InventoryItemData> _toolbarSlots = new List<InventoryItemData>();
+
+    public List<InventoryItemData> inventorySlots = new List<InventoryItemData>();
     public void AddItemToInventory(Item itemToAdd)
     {
-        CheckForFreeSlots();
+        // Create a new InventoryItemData
+        InventoryItemData newItemData = new InventoryItemData();
 
-        // If there are free slots available
-        if (GameManager.Instance.freeSlotsAvailable)
-        {
-            ItemSO itemSO = itemToAdd.GetComponent<Item>().itemSO;
-            if (!itemSO.isStackable)
-            {
-                foreach (InventoryItemData inventorySlot in GameManager.Instance.inventorySlots)
-                {
-                    if (inventorySlot.itemInSlot == null)
-                    {
-                        inventorySlot.itemInSlot = itemSO;
-                        // not working at the moment
-                        Debug.Log("function called");
-                        Destroy(itemToAdd.gameObject);
-                        break;
-                    }
-                }
+        // Assuming the Item class has a property or a field that refers to an ItemSO
+        newItemData.itemInSlot = itemToAdd.itemSO; // Replace 'itemSO' with the actual name of the property/field in your Item class that refers to an ItemSO
 
-                CheckForFreeSlots(); // or directly remove the index of the slot from the list
-            }
-            else
-            {
-                foreach (InventoryItemData inventorySlot in GameManager.Instance.inventorySlots)
-                {
-                    // Look for the item in the inventory
-                    if (inventorySlot.itemInSlot == itemSO)
-                    {
-                        // if found increnemt the count by amount in the ground stack
-                        inventorySlot.AddToSlot(itemToAdd.quantityInStack);
-                        break;
-                    }
-                    // if not found, add it to a free slot
-                }
+        // Add the quantity from itemToAdd to the newItemData
+        newItemData.AddToSlot(itemToAdd.quantityInStack);
 
-                CheckForFreeSlots(); // or directly remove the index of the slot from the list
-            }
-        }
+        // Add the newItemData to the inventorySlots
+        inventorySlots.Add(newItemData);
+
+        // Destroy the itemToAdd gameObject
+        Destroy(itemToAdd.gameObject);
     }
 
     public void CheckForFreeSlots()
     {
-        foreach (InventoryItemData inventorySlot in GameManager.Instance.inventorySlots)
+        foreach (InventoryItemData inventorySlot in inventorySlots)
         {
             // check each slot to see if it is free
             // if slot is free and not in free slot list, add index to free slot list
