@@ -21,6 +21,8 @@ public class Item : MonoBehaviour
         get { return _quantityInStack; }
     }
 
+    public bool stackable;
+
     private void OnEnable()
     {
         // 1. Get components

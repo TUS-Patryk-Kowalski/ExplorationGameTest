@@ -3,18 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-public class InventoryItemData
-{
-    public ItemSO itemInSlot;
-    private int quantity;
-
-    public void AddToSlot(int amount)
-    {
-        quantity += amount;
-    }
-}
-
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
@@ -23,10 +11,12 @@ public class GameManager : MonoBehaviour
     [Header("Object references")]
     public GameObject player;
     public GameObject cameraPoint;
+    public GameObject hotbar;
 
     [Space]
     [Header("Component references")]
     public InventoryManager inventoryManager;
+    public InventoryUIManager inventoryUIManager;
 
     [Space]
     [Header("Defaults in case of errors")]
@@ -65,7 +55,9 @@ public class GameManager : MonoBehaviour
             
         player = GameObject.FindWithTag("Player");
         cameraPoint = GameObject.Find("PlayerFollowCamera");
+        hotbar = GameObject.Find("HotbarHUD");
         inventoryManager = gameObject.GetComponent<InventoryManager>();
+        
     }
 
     private void Update()
