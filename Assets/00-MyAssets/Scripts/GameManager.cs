@@ -11,12 +11,11 @@ public class GameManager : MonoBehaviour
     [Header("Object references")]
     public GameObject player;
     public GameObject cameraPoint;
-    public GameObject hotbar;
+    public GameObject inventoryUI;
 
     [Space]
     [Header("Component references")]
     public InventoryManager inventoryManager;
-    public InventoryUIManager inventoryUIManager;
 
     [Space]
     [Header("Defaults in case of errors")]
@@ -55,15 +54,15 @@ public class GameManager : MonoBehaviour
             
         player = GameObject.FindWithTag("Player");
         cameraPoint = GameObject.Find("PlayerFollowCamera");
-        hotbar = GameObject.Find("HotbarHUD");
+        inventoryUI = GameObject.Find("InventoryHUD");
         inventoryManager = gameObject.GetComponent<InventoryManager>();
-        
     }
 
     private void Update()
     {
         _cameraDirection = player.transform.eulerAngles;
     }
+
     // if something fails on an item, use this function-
     // to make the object easier to locate in-game
     public IEnumerator FlashRed(Light light)

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Rarity;
+
 public class Item : MonoBehaviour
 {
     public ItemSO itemSO;
@@ -156,11 +158,5 @@ public class Item : MonoBehaviour
             // Interpolate the light's intensity from its maximum value to 0
             _itemLight.intensity = Mathf.Lerp(startingLightIntensity, 0, normalizedDistance);
         }
-    }
-
-    private void MergeItemStacks()
-    {
-        // when items of the same type are near each other (dont forget about rarity), merge them to save performance
-        // Each item has a quantity vriables
     }
 }
