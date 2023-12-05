@@ -103,4 +103,11 @@ public class InventoryManager : MonoBehaviour
         // Handle full inventory scenario
     }
 
+    private void UpdateUI()
+    {
+        foreach (GameObject itemSlot in GameManager.Instance.inventoryManager.inventorySlotGO)
+        {
+            
+        }
+    }
 }
