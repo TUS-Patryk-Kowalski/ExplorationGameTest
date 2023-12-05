@@ -32,15 +32,15 @@ public class InventoryManager : MonoBehaviour
 {
     public int startingInventorySlots;
 
-    public List<InventoryItemData> inventorySlots = new List<InventoryItemData>();
+    public List<InventoryItemData> hotbarSlots = new List<InventoryItemData>();
     public List<RaritySpritePair> rarityToSprite = new List<RaritySpritePair>();
 
     private void Start()
     {
         for (int i = 0; i < startingInventorySlots; i++)
         {
-            inventorySlots.Add(new InventoryItemData());
-            inventorySlots[i].itemSlotGO = GameManager.Instance.inventoryUI.transform.GetChild(i).gameObject;
+            hotbarSlots.Add(new InventoryItemData());
+            hotbarSlots[i].itemSlotGO = GameManager.Instance.inventoryUI.transform.GetChild(i).gameObject;
         }
     }
 
@@ -60,7 +60,7 @@ public class InventoryManager : MonoBehaviour
 
     private void AddNonStackableItem(Item itemToAdd)
     {
-        foreach (InventoryItemData slot in inventorySlots)
+        foreach (InventoryItemData slot in hotbarSlots)
         {
             if (slot.itemInSlot == null)
             {
@@ -75,7 +75,7 @@ public class InventoryManager : MonoBehaviour
 
     private void AddStackableItem(Item itemToAdd)
     {
-        foreach (InventoryItemData slot in inventorySlots)
+        foreach (InventoryItemData slot in hotbarSlots)
         {
             if (slot.itemInSlot != null && slot.itemInSlot == itemToAdd.itemSO && slot.itemInSlot.itemRarity == itemToAdd.itemSO.itemRarity)
             {
@@ -86,7 +86,7 @@ public class InventoryManager : MonoBehaviour
         }
 
         // If item not found in inventory, add to first empty slot
-        foreach (InventoryItemData slot in inventorySlots)
+        foreach (InventoryItemData slot in hotbarSlots)
         {
             if (slot.itemInSlot == null)
             {
@@ -101,7 +101,7 @@ public class InventoryManager : MonoBehaviour
 
     private void UpdateUI()
     {
-        foreach (InventoryItemData slot in inventorySlots)
+        foreach (InventoryItemData slot in hotbarSlots)
         {
             if (slot.itemInSlot != null)
             {

@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
             
         player = GameObject.FindWithTag("Player");
         cameraPoint = GameObject.Find("PlayerFollowCamera");
-        inventoryUI = GameObject.Find("InventoryHUD");
+        inventoryUI = GameObject.Find("HotbarHUD");
         inventoryManager = gameObject.GetComponent<InventoryManager>();
     }
 
