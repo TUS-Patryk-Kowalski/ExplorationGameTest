@@ -161,6 +161,6 @@ public class Item : MonoBehaviour
     private void MergeItemStacks()
     {
         // when items of the same type are near each other (dont forget about rarity), merge them to save performance
-        // Eah item has a quantity vriables
+        // Each item has a quantity vriables
     }
 }
