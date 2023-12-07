@@ -23,7 +23,9 @@ public class Item : MonoBehaviour
         get { return _quantityInStack; }
     }
 
-    public bool stackable;
+    private bool spriteEnabled;
+    private bool lightEnabled;
+    private bool physicsEnabled;
 
     private void OnEnable()
     {
@@ -33,14 +35,14 @@ public class Item : MonoBehaviour
         _itemSR = GetComponentInChildren<SpriteRenderer>();
         _itemLight = GetComponentInChildren<Light>();
 
-        // 2. Set the variables
+        // 2. Set variables
         originalY = _itemSR.transform.localPosition.y;
         bobbingSpeed = Random.Range(bobbingSpeed - bobbingSpeedOffset, bobbingSpeed + bobbingSpeedOffset);
-        _itemRB.mass = itemSO.itemMass;
+        _itemRB.mass = itemSO.itemSettingsSO.itemMass;
         if(_itemRB.mass < 0.25f) _itemRB.mass = 0.25f;
 
         // Since this is in the OnEnable function-
-        // this makes sure the starting intensity doesn't get set again-
+        // the if() makes sure the starting intensity doesn't get set again-
         // when the item leaves the player's range and comes back
         if (startingLightIntensity == 0) startingLightIntensity = _itemLight.intensity;
 
@@ -79,22 +81,17 @@ public class Item : MonoBehaviour
         _itemSR.transform.eulerAngles = GameManager.Instance.cameraDirection;
     }
 
-    // The item sprite bobs up and down slowly
+    // Make the item sprite bob up and down slowly
     private float originalY;
     private void BobbingMotion()
     {
-        // Calculate the new Y position
         float newY = originalY + bobbingHeight * Mathf.Sin(Time.time * bobbingSpeed);
-
-        // Update the localPosition of the item
         _itemSR.transform.localPosition = new Vector3(0, newY, 0);
     }
 
     // for performance reasons, make different components of an item get disabled-
     // once the player gets a specified distance away
-    private bool spriteEnabled;
-    private bool lightEnabled;
-    private bool physicsEnabled;
+
     private void PerformDistanceCulling()
     {
         float distanceToPlayer = Vector3.Distance(GameManager.Instance.player.transform.position, transform.position);

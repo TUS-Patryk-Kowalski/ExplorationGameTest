@@ -16,5 +16,4 @@ MonoBehaviour:
   itemDescription: An apple that restores some health.
   itemSprite: {fileID: -419772664, guid: c7f75a38b0a58214eaae2eb43025424f, type: 3}
   itemRarity: 6
-  isStackable: 1
-  itemMass: 0
+  itemSettingsSO: {fileID: 11400000, guid: 9b59dceeb0e28d648bba3388f6c1fe0a, type: 2}

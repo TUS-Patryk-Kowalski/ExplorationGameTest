@@ -29,6 +29,5 @@ public class ItemSO : ScriptableObject
     public ItemRarity itemRarity;
     [Space]
     [Header("Item Settings")]
-    public bool isStackable;
-    public float itemMass;
+    public ItemSettingsSO itemSettingsSO;
 }

@@ -16,5 +16,4 @@ MonoBehaviour:
   itemDescription: Sharp and ready to face your foes head on!
   itemSprite: {fileID: -1834437991, guid: c7f75a38b0a58214eaae2eb43025424f, type: 3}
   itemRarity: 4
-  isStackable: 0
-  itemMass: 0.5
+  itemSettingsSO: {fileID: 11400000, guid: 1370978b2bd378346ad587517ff7954a, type: 2}

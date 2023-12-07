@@ -10,14 +10,28 @@ using UnityEngine.UI;
 public class InventoryItemData
 {
     public GameObject itemSlotGO;
-    public ItemSO itemInSlot;
 
     [SerializeField]
-    private int quantity;
+    private ItemSO _itemInSlot;
 
-    public void AddToSlot(int amount)
+    public ItemSO itemInSlot
     {
-        quantity += amount;
+        get { return _itemInSlot; }
+    }
+
+    [SerializeField]
+    private int _quantity;
+
+    public int quantity
+    {
+        get { return quantity; }
+    }
+
+    public void AddToSlot(Item item)
+    {
+        _itemInSlot = item.itemSO;
+        _quantity += item.quantityInStack;
+        GameObject.Destroy(item.gameObject);
     }
 }
 
@@ -46,7 +60,7 @@ public class InventoryManager : MonoBehaviour
 
     public void AddItemToInventory(Item itemToAdd)
     {
-        if (!itemToAdd.stackable)
+        if (!itemToAdd.itemSO.itemSettingsSO.isStackable)
         {
             AddNonStackableItem(itemToAdd);
             UpdateUI();
@@ -64,13 +78,10 @@ public class InventoryManager : MonoBehaviour
         {
             if (slot.itemInSlot == null)
             {
-                slot.itemInSlot = itemToAdd.itemSO;
-                slot.AddToSlot(itemToAdd.quantityInStack);
-                Destroy(itemToAdd.gameObject);
+                slot.AddToSlot(itemToAdd);
                 return;
             }
         }
-        // Handle full inventory scenario
     }
 
     private void AddStackableItem(Item itemToAdd)
@@ -79,8 +90,7 @@ public class InventoryManager : MonoBehaviour
         {
             if (slot.itemInSlot != null && slot.itemInSlot == itemToAdd.itemSO && slot.itemInSlot.itemRarity == itemToAdd.itemSO.itemRarity)
             {
-                slot.AddToSlot(itemToAdd.quantityInStack);
-                Destroy(itemToAdd.gameObject);
+                slot.AddToSlot(itemToAdd);
                 return;
             }
         }
@@ -90,13 +100,10 @@ public class InventoryManager : MonoBehaviour
         {
             if (slot.itemInSlot == null)
             {
-                slot.itemInSlot = itemToAdd.itemSO;
-                slot.AddToSlot(itemToAdd.quantityInStack);
-                Destroy(itemToAdd.gameObject);
+                slot.AddToSlot(itemToAdd);
                 return;
             }
         }
-        // Handle full inventory scenario
     }
 
     private void UpdateUI()
