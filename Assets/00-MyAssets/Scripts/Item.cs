@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using Rarity;
+using Common.Enums;
 
 public class Item : MonoBehaviour
 {
@@ -38,7 +38,7 @@ public class Item : MonoBehaviour
         // 2. Set variables
         originalY = _itemSR.transform.localPosition.y;
         bobbingSpeed = Random.Range(bobbingSpeed - bobbingSpeedOffset, bobbingSpeed + bobbingSpeedOffset);
-        _itemRB.mass = itemSO.itemSettingsSO.itemMass;
+        _itemRB.mass = itemSO != null ? itemSO.itemSettingsSO.itemMass : 0.25f;
         if(_itemRB.mass < 0.25f) _itemRB.mass = 0.25f;
 
         // Since this is in the OnEnable function-
@@ -46,24 +46,28 @@ public class Item : MonoBehaviour
         // when the item leaves the player's range and comes back
         if (startingLightIntensity == 0) startingLightIntensity = _itemLight.intensity;
 
+        if (settingsSO == null)
+        {
+            settingsSO = itemSO != null ? itemSO.itemSettingsSO : null;
+        }
+
+        // If itemSO is assigned but has no sprite variable assigned... do:
+        if (itemSO && itemSO.itemSprite == null)
+        {
+            Debug.LogWarning($"Item sprite is missing in the ScriptableObject for the item: {gameObject.name}!");
+            StartCoroutine(GameManager.Instance.FlashRed(_itemLight));
+        }
+
         // Check if ScriptableObject is assigned
         if (itemSO == null)
         {
             Debug.LogWarning($"ScriptableObject is missing on the item {gameObject.name}!");
             _itemSR.sprite = GameManager.Instance.missingSprite;
             StartCoroutine(GameManager.Instance.FlashRed(_itemLight));
-            return;
         }
 
         // Set the sprite                  if true set itemSO's sprite | if false get fallback sprite
-        _itemSR.sprite = itemSO.itemSprite != null ? itemSO.itemSprite : GameManager.Instance.missingSprite;
-
-        // If itemSO is assigned but has no sprite variable assigned... do:
-        if (itemSO.itemSprite == null)
-        {
-            Debug.LogWarning($"Item sprite is missing in the ScriptableObject for the item: {gameObject.name}!");
-            StartCoroutine(GameManager.Instance.FlashRed(_itemLight));
-        }
+        _itemSR.sprite = itemSO != null ? itemSO.itemSprite : GameManager.Instance.missingSprite;
 
         SetLightColourBasedOnRarity();
     }
@@ -111,29 +115,29 @@ public class Item : MonoBehaviour
     {
         switch (itemSO.itemRarity)
         {
-            case ItemRarity.Common:
+            case Rarity.Common:
                 _itemLight.color = GameManager.Instance.common;
                 break;
-            case ItemRarity.Uncommon:
+            case Rarity.Uncommon:
                 _itemLight.color = GameManager.Instance.uncommon;
                 break;
-            case ItemRarity.Rare:
+            case Rarity.Rare:
                 _itemLight.color = GameManager.Instance.rare;
                 break;
-            case ItemRarity.Epic:
+            case Rarity.Epic:
                 _itemLight.color = GameManager.Instance.epic;
                 break;
-            case ItemRarity.Legendary:
+            case Rarity.Legendary:
                 _itemLight.color = GameManager.Instance.legendary;
                 break;
-            case ItemRarity.Mythic:
+            case Rarity.Mythic:
                 _itemLight.color = GameManager.Instance.mythic;
                 break;
-            case ItemRarity.Otherworldly:
+            case Rarity.Otherworldly:
                 _itemLight.color = GameManager.Instance.otherworldly;
                 break;
             default:
-                Debug.LogWarning($"Item rarity Not Set for {gameObject.name}!");
+                Debug.LogWarning($"Item rarity is null for {gameObject.name}!");
                 StartCoroutine(GameManager.Instance.FlashRed(_itemLight));
                 break;
         }

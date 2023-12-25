@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-using Rarity;
 using UnityEngine.UI;
+
+using Common.Enums;
 
 [Serializable]
 public class InventoryItemData
@@ -24,7 +24,7 @@ public class InventoryItemData
 
     public int quantity
     {
-        get { return quantity; }
+        get { return _quantity; }
     }
 
     public void AddToSlot(Item item)
@@ -38,7 +38,7 @@ public class InventoryItemData
 [Serializable]
 public class RaritySpritePair
 {
-    public ItemRarity rarity;
+    public Rarity rarity;
     public Sprite sprite;
 }
 
@@ -60,35 +60,15 @@ public class InventoryManager : MonoBehaviour
 
     public void AddItemToInventory(Item itemToAdd)
     {
-        if (!itemToAdd.itemSO.itemSettingsSO.isStackable)
-        {
-            AddNonStackableItem(itemToAdd);
-            UpdateUI();
-        }
-        else
-        {
-            AddStackableItem(itemToAdd);
-            UpdateUI();
-        }
+        UpdatedPickup(itemToAdd);
+        UpdateUI();
     }
 
-    private void AddNonStackableItem(Item itemToAdd)
+    private void UpdatedPickup(Item itemToAdd)
     {
         foreach (InventoryItemData slot in hotbarSlots)
         {
-            if (slot.itemInSlot == null)
-            {
-                slot.AddToSlot(itemToAdd);
-                return;
-            }
-        }
-    }
-
-    private void AddStackableItem(Item itemToAdd)
-    {
-        foreach (InventoryItemData slot in hotbarSlots)
-        {
-            if (slot.itemInSlot != null && slot.itemInSlot == itemToAdd.itemSO && slot.itemInSlot.itemRarity == itemToAdd.itemSO.itemRarity)
+            if (slot.itemInSlot != null && slot.itemInSlot == itemToAdd.itemSO && slot.itemInSlot.itemRarity == itemToAdd.itemSO.itemRarity && slot.quantity < itemToAdd.settingsSO.maxStack)
             {
                 slot.AddToSlot(itemToAdd);
                 return;

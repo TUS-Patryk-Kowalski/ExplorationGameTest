@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b148ca4a39464e14a9391f6b2c14c403, type: 3}
   m_Name: StackableDefault
   m_EditorClassIdentifier: 
-  isStackable: 1
+  maxStack: 3
   itemMass: 0
   spriteRenderDistance: 48
   lightRenderDistance: 16

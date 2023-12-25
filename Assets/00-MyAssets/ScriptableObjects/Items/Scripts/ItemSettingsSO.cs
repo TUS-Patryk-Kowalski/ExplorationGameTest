@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ItemSettingsObject", menuName = "Inventory/Items/Settings")]
 public class ItemSettingsSO : ScriptableObject
 {
-    public bool isStackable;
+    public float maxStack;
     public float itemMass;
     [Space]
     public float spriteRenderDistance;
