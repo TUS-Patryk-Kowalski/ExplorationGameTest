@@ -3,18 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class DungeonEntrance : MonoBehaviour
 {
     public Rarity dungeonRarity;
+    public bool playerInTrigger;
 
     public GameObject entrance;
     public ParticleSystem entranceParticles;
     public float fadeOutDuration = 2f;
 
     public Animator doorAnimator;
-
     public Coroutine doorParticleIEnum;
+
+    public DungeonController dungeonController;
+    public DungeonRenderer dungeonRenderer;
 
     private void OnEnable()
     {
@@ -26,12 +30,29 @@ public class DungeonEntrance : MonoBehaviour
     {
         var mainModule = entranceParticles.main;
         mainModule.startColor = SetColourByDungeonLevel();
+
+        dungeonController = GetComponentInChildren<DungeonController>();
+        dungeonController.readyToGenerate = true; 
+        dungeonController.enabled = false;
+
+        dungeonRenderer = GetComponentInChildren<DungeonRenderer>();
+        dungeonRenderer.DungeonRenderUpdate();
+    }
+
+    private void Update()
+    {
+        if(playerInTrigger && Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            dungeonController.enabled = true;
+            dungeonRenderer.DungeonRenderUpdate();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            playerInTrigger = true;
             entranceParticles.gameObject.SetActive(true);
 
             var mainModule = entranceParticles.main;
@@ -47,6 +68,7 @@ public class DungeonEntrance : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            playerInTrigger = false;
             doorParticleIEnum = StartCoroutine(FadeParticles());
             doorAnimator.SetBool("PlayerInTrigger", false);
         }

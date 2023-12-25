@@ -93,4 +93,11 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
         }
     }
+
+    public void MovePlayer(Transform newPosition, Vector3 offset)
+    {
+        player.SetActive(false);
+        player.transform.position = (newPosition.position + offset);
+        player.SetActive(true);
+    }
 }

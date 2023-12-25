@@ -9,13 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6395537875069984014}
+  - component: {fileID: 3489916064157947213}
   m_Layer: 0
   m_Name: DungeonStart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6395537875069984014
 Transform:
   m_ObjectHideFlags: 0
@@ -31,6 +32,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8817333192879631852}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3489916064157947213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 310716679308903470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e97c3873064b78478bcccf66995b777, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  readyToGenerate: 0
 --- !u!1 &880337462847483294
 GameObject:
   m_ObjectHideFlags: 0
@@ -6467,7 +6481,7 @@ GameObject:
   - component: {fileID: 4984778063814283001}
   - component: {fileID: 3154951768763538552}
   m_Layer: 0
-  m_Name: DungeonEntrance
+  m_Name: Dungeon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6525,10 +6539,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dungeonRarity: 0
+  playerInTrigger: 0
   entrance: {fileID: 0}
   entranceParticles: {fileID: 0}
   fadeOutDuration: 2
   doorAnimator: {fileID: 0}
+  dungeonController: {fileID: 0}
 --- !u!95 &3154951768763538552
 Animator:
   serializedVersion: 5
