@@ -29,8 +29,8 @@ public class InventoryItemData
 
     public void AddToSlot(Item item)
     {
-        _itemInSlot = item.itemSO;
-        _quantity += item.quantityInStack;
+        if(item.itemSO) _itemInSlot = item.itemSO;
+        if(item.itemSO) _quantity += item.quantityInStack;
         GameObject.Destroy(item.gameObject);
     }
 }

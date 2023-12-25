@@ -7,35 +7,30 @@ using UnityEngine.InputSystem;
 
 public class DungeonEntrance : MonoBehaviour
 {
-    public Rarity dungeonRarity;
-    public bool playerInTrigger;
-
-    public GameObject entrance;
-    public ParticleSystem entranceParticles;
-    public float fadeOutDuration = 2f;
-
-    public Animator doorAnimator;
-    public Coroutine doorParticleIEnum;
-
     public DungeonController dungeonController;
     public DungeonRenderer dungeonRenderer;
+    public Rarity dungeonRarity;
+    public float fadeOutDuration = 2f;
+
+    private bool playerInTrigger;
+    private ParticleSystem entranceParticles;
+    private Animator doorAnimator;
+    private Coroutine doorParticleIEnum; // TODO
 
     private void OnEnable()
     {
-        doorAnimator = GetComponent<Animator>();
-        entranceParticles = GetComponentInChildren<ParticleSystem>();
+        if(!doorAnimator) doorAnimator = GetComponent<Animator>();
+        if(!entranceParticles) entranceParticles = GetComponentInChildren<ParticleSystem>();
+        if (!dungeonController) dungeonController = GetComponentInChildren<DungeonController>();
+        if (!dungeonRenderer) dungeonRenderer = GetComponentInChildren<DungeonRenderer>();
     }
 
     private void Start()
     {
         var mainModule = entranceParticles.main;
         mainModule.startColor = SetColourByDungeonLevel();
-
-        dungeonController = GetComponentInChildren<DungeonController>();
         dungeonController.readyToGenerate = true; 
         dungeonController.enabled = false;
-
-        dungeonRenderer = GetComponentInChildren<DungeonRenderer>();
         dungeonRenderer.DungeonRenderUpdate();
     }
 

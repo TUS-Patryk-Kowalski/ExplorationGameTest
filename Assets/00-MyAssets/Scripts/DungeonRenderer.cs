@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class DungeonRenderer : MonoBehaviour
 {
-    public DungeonController dungeonController;
+    private DungeonController dungeonController;
 
-    public void Start()
+    public void Awake()
     {
         dungeonController = GetComponent<DungeonController>();
     }

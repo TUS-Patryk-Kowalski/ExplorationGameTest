@@ -70,10 +70,10 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
             
-        player = GameObject.FindWithTag("Player");
-        cameraPoint = GameObject.Find("PlayerFollowCamera");
-        inventoryUI = GameObject.Find("HotbarHUD");
-        inventoryManager = gameObject.GetComponent<InventoryManager>();
+        if(!player) player = GameObject.FindWithTag("Player");
+        if(!cameraPoint) cameraPoint = GameObject.Find("PlayerFollowCamera");
+        if(!inventoryUI) inventoryUI = GameObject.Find("HotbarHUD");
+        if(!inventoryManager) inventoryManager = gameObject.GetComponent<InventoryManager>();
     }
 
     private void Update()
@@ -83,11 +83,11 @@ public class GameManager : MonoBehaviour
 
     // if something fails on an item, use this function-
     // to make the object easier to locate in-game
-    public IEnumerator FlashRed(Light light)
+    public IEnumerator Flash(Light light, Color color)
     {
         while (true)
         {
-            light.color = Color.red;
+            light.color = color;
             yield return new WaitForSeconds(0.2f);
             light.color = Color.black;
             yield return new WaitForSeconds(0.2f);

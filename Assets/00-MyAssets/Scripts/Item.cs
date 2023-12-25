@@ -54,22 +54,21 @@ public class Item : MonoBehaviour
         // If itemSO is assigned but has no sprite variable assigned... do:
         if (itemSO && itemSO.itemSprite == null)
         {
-            Debug.LogWarning($"Item sprite is missing in the ScriptableObject for the item: {gameObject.name}!");
-            StartCoroutine(GameManager.Instance.FlashRed(_itemLight));
+            Debug.LogWarning($"Item sprite is missing in the ScriptableObject for {gameObject.name}!");
+            StartCoroutine(GameManager.Instance.Flash(_itemLight, Color.red));
         }
 
         // Check if ScriptableObject is assigned
         if (itemSO == null)
         {
-            Debug.LogWarning($"ScriptableObject is missing on the item {gameObject.name}!");
+            Debug.LogWarning($"ScriptableObject is missing on {gameObject.name}!");
             _itemSR.sprite = GameManager.Instance.missingSprite;
-            StartCoroutine(GameManager.Instance.FlashRed(_itemLight));
+            StartCoroutine(GameManager.Instance.Flash(_itemLight, Color.red));
         }
 
         // Set the sprite                  if true set itemSO's sprite | if false get fallback sprite
         _itemSR.sprite = itemSO != null ? itemSO.itemSprite : GameManager.Instance.missingSprite;
-
-        SetLightColourBasedOnRarity();
+        if(itemSO) _itemLight.color = SetLightColourBasedOnRarity();
     }
 
     private void FixedUpdate()
@@ -111,35 +110,28 @@ public class Item : MonoBehaviour
     }
 
     // Set light's colour based on the item's rarity from the itemSO
-    private void SetLightColourBasedOnRarity()
+    private Color SetLightColourBasedOnRarity()
     {
         switch (itemSO.itemRarity)
         {
             case Rarity.Common:
-                _itemLight.color = GameManager.Instance.common;
-                break;
+                return GameManager.Instance.common;
             case Rarity.Uncommon:
-                _itemLight.color = GameManager.Instance.uncommon;
-                break;
+                return GameManager.Instance.uncommon;
             case Rarity.Rare:
-                _itemLight.color = GameManager.Instance.rare;
-                break;
+                return GameManager.Instance.rare;
             case Rarity.Epic:
-                _itemLight.color = GameManager.Instance.epic;
-                break;
+                return GameManager.Instance.epic;
             case Rarity.Legendary:
-                _itemLight.color = GameManager.Instance.legendary;
-                break;
+                return GameManager.Instance.legendary;
             case Rarity.Mythic:
-                _itemLight.color = GameManager.Instance.mythic;
-                break;
+                return GameManager.Instance.mythic;
             case Rarity.Otherworldly:
-                _itemLight.color = GameManager.Instance.otherworldly;
-                break;
+                return GameManager.Instance.otherworldly;
             default:
                 Debug.LogWarning($"Item rarity is null for {gameObject.name}!");
-                StartCoroutine(GameManager.Instance.FlashRed(_itemLight));
-                break;
+                StartCoroutine(GameManager.Instance.Flash(_itemLight, Color.red));
+                return Color.red;
         }
     }
 
