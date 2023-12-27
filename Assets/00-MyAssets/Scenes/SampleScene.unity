@@ -36944,6 +36944,16 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 994231161}
+    - target: {fileID: 4720141182183264798, guid: 9c61c991d7098924d817305f9b510245,
+        type: 3}
+      propertyPath: m_SelectedEdges.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4720141182183264798, guid: 9c61c991d7098924d817305f9b510245,
+        type: 3}
+      propertyPath: m_SelectedVertices.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4984778063814283001, guid: 9c61c991d7098924d817305f9b510245,
         type: 3}
       propertyPath: dungeonRarity
@@ -36954,6 +36964,11 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1062417841}
+    - target: {fileID: 5581967762435467570, guid: 9c61c991d7098924d817305f9b510245,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5652245027960247616, guid: 9c61c991d7098924d817305f9b510245,
         type: 3}
       propertyPath: m_Mesh
@@ -36964,6 +36979,11 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 786339109}
+    - target: {fileID: 6230360834339326216, guid: 9c61c991d7098924d817305f9b510245,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6b4a8d1877e233b4095592aeb087b253, type: 2}
     - target: {fileID: 6616287480716212734, guid: 9c61c991d7098924d817305f9b510245,
         type: 3}
       propertyPath: m_Name
@@ -36974,6 +36994,11 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 994231161}
+    - target: {fileID: 7282113284800835451, guid: 9c61c991d7098924d817305f9b510245,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7727287250577446838, guid: 9c61c991d7098924d817305f9b510245,
         type: 3}
       propertyPath: m_Mesh
@@ -47631,7 +47656,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1531799373}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 2
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -51670,7 +51695,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 1003549462}
-  m_VersionIndex: 13589
+  m_VersionIndex: 13592
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
