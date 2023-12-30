@@ -1,23 +1,21 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DungeonController : MonoBehaviour
 {
     public int roomsToSpawn;
+    public int bonusRoomsSpawn;
     public bool readyToGenerate;
-    private bool generatedDungeon;
+    public bool generatedDungeon;
 
-    // Add 2 lists, one for the new room's connection data points, and one for the existing grounded connection data points
+    public List<GameObject> StartingRooms = new List<GameObject>();
+    public List<GameObject> NormalRooms = new List<GameObject>();
+    public List<GameObject> Corridors = new List<GameObject>();
+    public List<GameObject> BonusRooms = new List<GameObject>();
+    public List<GameObject> BossRooms = new List<GameObject>();
+    public List<GameObject> ReturnPortalRoom = new List<GameObject>();
 
-    private void OnEnable()
-    {
-        if (!generatedDungeon && readyToGenerate)
-        {
-            GenerateDungeon();
-            GameManager.Instance.MovePlayer(transform, new Vector3(0,2,0));
-        }
-    }
-
-    private void GenerateDungeon()
+    public void GenerateDungeon()
     {
         // Code for generating the dungeon
 
@@ -70,13 +68,19 @@ public class DungeonController : MonoBehaviour
 
         // K. if the room Overlaps, do K1, if it doesn't overlap, do K2
         //
-        // - K2. Set all of the room's connections as grounded
-        //       Reduce roomsToSpawn by 1 if the prefab is a room, not a corridor
-        //       Go back to Step D if roomsToSpawn is not 0
-        //
         // - K1. Return to step I
         //       but if it fails a set number of times;
         //          Destroy the Room/Corridor, and go back to step D instead
+        //
+        // - K2. Set all of the room's connections as grounded
+        //       Reduce roomsToSpawn by 1 if the prefab is a room, not a corridor
+        //       Go back to Step D if roomsToSpawn is not 0
+
+        // L. Create the specified number of bonus rooms
+
+        // M. create a boss room
+
+        // N. create a return portal room connected to the boss room
 
         generatedDungeon = true;
     }

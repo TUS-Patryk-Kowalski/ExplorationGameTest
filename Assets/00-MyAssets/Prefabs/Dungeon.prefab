@@ -44,7 +44,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e97c3873064b78478bcccf66995b777, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomsToSpawn: 0
+  bonusRoomsSpawn: 0
   readyToGenerate: 0
+  StartingRooms: []
+  NormalRooms: []
+  Corridors: []
+  BonusRooms: []
+  BossRooms: []
+  ReturnPortalRoom: []
 --- !u!1 &880337462847483294
 GameObject:
   m_ObjectHideFlags: 0
@@ -72,7 +80,7 @@ Transform:
   m_GameObject: {fileID: 880337462847483294}
   serializedVersion: 2
   m_LocalRotation: {x: -1, y: -0, z: -0, w: 0.0000029653306}
-  m_LocalPosition: {x: 0, y: 3.5, z: 2}
+  m_LocalPosition: {x: 0, y: 3.5, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -161,7 +169,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 3
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -214,7 +222,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 10
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -656,7 +664,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: -0.5
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -915,7 +923,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 15
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -4036,8 +4044,8 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     minVertexDistance: 0.2
-    textureMode: 0
-    textureScale: {x: 1, y: 1}
+    textureMode: 2
+    textureScale: {x: 0.75, y: 1}
     ribbonCount: 1
     shadowBias: 0.5
     worldSpace: 0
@@ -6538,13 +6546,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ddbb7bd85bf95b44b224a969e4a9fb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dungeonRarity: 0
-  playerInTrigger: 0
-  entrance: {fileID: 0}
-  entranceParticles: {fileID: 0}
-  fadeOutDuration: 2
-  doorAnimator: {fileID: 0}
   dungeonController: {fileID: 0}
+  dungeonRenderer: {fileID: 0}
+  dungeonRarity: 0
 --- !u!95 &3154951768763538552
 Animator:
   serializedVersion: 5

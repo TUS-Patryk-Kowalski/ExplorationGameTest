@@ -1,7 +1,5 @@
 using Common.Enums;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,12 +8,11 @@ public class DungeonEntrance : MonoBehaviour
     public DungeonController dungeonController;
     public DungeonRenderer dungeonRenderer;
     public Rarity dungeonRarity;
-    public float fadeOutDuration = 2f;
 
     private bool playerInTrigger;
     private ParticleSystem entranceParticles;
     private Animator doorAnimator;
-    private Coroutine doorParticleIEnum; // TODO
+    private Coroutine doorParticleIEnum;
 
     private void OnEnable()
     {
@@ -36,10 +33,11 @@ public class DungeonEntrance : MonoBehaviour
 
     private void Update()
     {
-        if(playerInTrigger && Keyboard.current.eKey.wasPressedThisFrame)
+        if(playerInTrigger && Keyboard.current.eKey.wasPressedThisFrame && dungeonController.generatedDungeon)
         {
             dungeonController.enabled = true;
             dungeonRenderer.DungeonRenderUpdate();
+            GameManager.Instance.MovePlayer(dungeonController.gameObject.transform, new Vector3(0, 2, 0));
         }
     }
 
@@ -47,6 +45,11 @@ public class DungeonEntrance : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            if (dungeonController.readyToGenerate && !dungeonController.generatedDungeon)
+            {
+                dungeonController.GenerateDungeon();
+            }
+
             playerInTrigger = true;
             entranceParticles.gameObject.SetActive(true);
 
@@ -71,10 +74,17 @@ public class DungeonEntrance : MonoBehaviour
 
     private IEnumerator FadeParticles()
     {
-        // Fade out door particles until opacity is 0
-        // once the new particle opacity is 0, wait for however long the particles stay for (particle lifespan)
-        // after the time is up, stop, then disable the particle system
-        yield return null;
+        // Stop emitting new particles
+        entranceParticles.Stop();
+
+        // Wait for existing particles to fade out and die
+        while (entranceParticles.IsAlive(true))
+        {
+            yield return null;
+        }
+
+        entranceParticles.gameObject.SetActive(false);
+        StopCoroutine(doorParticleIEnum);
     }
 
     private Color SetColourByDungeonLevel()

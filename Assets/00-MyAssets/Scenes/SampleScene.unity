@@ -37950,6 +37950,11 @@ PrefabInstance:
       propertyPath: dungeonRarity
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 4984778063814283001, guid: 9c61c991d7098924d817305f9b510245,
+        type: 3}
+      propertyPath: dungeonStartingPoint
+      value: 
+      objectReference: {fileID: 1457416399}
     - target: {fileID: 5041249193870290332, guid: 9c61c991d7098924d817305f9b510245,
         type: 3}
       propertyPath: m_Mesh
@@ -37975,6 +37980,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 6b4a8d1877e233b4095592aeb087b253, type: 2}
+    - target: {fileID: 6527917738133755529, guid: 9c61c991d7098924d817305f9b510245,
+        type: 3}
+      propertyPath: TrailModule.ribbonCount
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6616287480716212734, guid: 9c61c991d7098924d817305f9b510245,
         type: 3}
       propertyPath: m_Name
@@ -73305,7 +73315,7 @@ Transform:
   m_GameObject: {fileID: 993699798235858845}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 55, y: 0, z: -10.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
