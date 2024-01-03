@@ -41,6 +41,8 @@ public class GameManager : MonoBehaviour
         get { return _cameraDirection; }
     }
 
+    public List<DungeonRoomSet> DungeonPrefabSets = new List<DungeonRoomSet>();
+
     private void Awake()
     {
         if (Instance == null)
@@ -79,7 +81,19 @@ public class GameManager : MonoBehaviour
     public void MovePlayer(Transform newPosition, Vector3 offset)
     {
         player.SetActive(false);
+        player.GetComponentInParent<Transform>().position = (newPosition.position + offset);
         player.transform.position = (newPosition.position + offset);
         player.SetActive(true);
     }
+}
+
+[Serializable]
+public class DungeonRoomSet
+{
+    public List<GameObject> StartingRooms = new List<GameObject>();
+    public List<GameObject> NormalRooms = new List<GameObject>();
+    public List<GameObject> Corridors = new List<GameObject>();
+    public List<GameObject> BonusRooms = new List<GameObject>();
+    public List<GameObject> BossRooms = new List<GameObject>();
+    public List<GameObject> ReturnPortalRoom = new List<GameObject>();
 }

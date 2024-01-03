@@ -43,10 +43,13 @@ public class DungeonEntrance : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // Check if the collision is the player
         if (other.gameObject.CompareTag("Player"))
         {
-            if (dungeonController.readyToGenerate && !dungeonController.generatedDungeon)
+            // Check if the dungeon is ready to generate and is not yet generated
+            if (dungeonController.readyToGenerate == true && dungeonController.generatedDungeon == false)
             {
+                // Generate the dungeon
                 dungeonController.GenerateDungeon();
             }
 

@@ -15,21 +15,29 @@ public class ConnectionPointData : MonoBehaviour
     public ConnectionSize connectionSize;
     public bool isPartOfGroundedRoom;
 
-    public void UpdateDirection(CardinalDirection direction)
+    public void UpdateDirection()
     {
-        switch (direction)
+        // Get the snapped Y rotation of the object
+        Vector3 currentRotation = transform.rotation.eulerAngles;
+        float snappedY = Mathf.Round(currentRotation.y / 90.0f) * 90.0f;
+
+        // Determine the cardinal direction based on the snapped rotation using a switch statement
+        switch (snappedY)
         {
-            case CardinalDirection.North:
-                transform.eulerAngles = new Vector3(0, 0, 0);
+            case 0.0f:
+                cardinalDirection = CardinalDirection.North;
                 break;
-            case CardinalDirection.East:
-                transform.eulerAngles = new Vector3(0, 90, 0);
+            case 90.0f:
+                cardinalDirection = CardinalDirection.East;
                 break;
-            case CardinalDirection.South:
-                transform.eulerAngles = new Vector3(0, 180, 0);
+            case 180.0f:
+                cardinalDirection = CardinalDirection.South;
                 break;
-            case CardinalDirection.West:
-                transform.eulerAngles = new Vector3(0, 270, 0);
+            case 270.0f:
+                cardinalDirection = CardinalDirection.West;
+                break;
+            default:
+                // Handle any other snappedY values here if needed
                 break;
         }
     }
