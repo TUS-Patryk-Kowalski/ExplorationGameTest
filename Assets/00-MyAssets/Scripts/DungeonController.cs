@@ -23,10 +23,8 @@ public class DungeonController : MonoBehaviour
         int randomIndex;
         randomIndex = Random.Range
             (
-            0, 
-            GameManager.Instance
-            .DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()]
-            .StartingRooms.Count
+            0,
+            GameManager.Instance.DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()].StartingRooms.Count
             );
 
         //    Instantiate the selected StartingRoom
@@ -35,15 +33,16 @@ public class DungeonController : MonoBehaviour
         GameObject room;
         room = Instantiate
             (
-            GameManager.Instance
-            .DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()]
-            .StartingRooms[randomIndex], transform.position, transform.rotation, transform
+            GameManager.Instance.DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()].StartingRooms[randomIndex],
+            transform.position,
+            transform.rotation,
+            transform
             );
         //    Go to step B
 
         // B. Rotate the StartingRoom randomly,
         Quaternion randomRotation;
-        randomRotation= Quaternion.Euler(0, Random.Range(0, 4) * 90.0f, 0);
+        randomRotation = Quaternion.Euler(0, Random.Range(0, 4) * 90.0f, 0);
 
         room.transform.rotation = randomRotation;
 
@@ -79,17 +78,13 @@ public class DungeonController : MonoBehaviour
             //       set the Room to a GameObject variable
             randomIndex = Random.Range
                 (
-                0, 
-                GameManager.Instance
-                .DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()]
-                .NormalRooms.Count
+                0,
+                GameManager.Instance.DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()].NormalRooms.Count
                 );
 
             room = Instantiate
                 (
-                GameManager.Instance
-                .DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()]
-                .NormalRooms[randomIndex], 
+                GameManager.Instance.DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()].NormalRooms[randomIndex], 
                 transform.position, 
                 transform.rotation, 
                 transform
@@ -103,9 +98,7 @@ public class DungeonController : MonoBehaviour
             randomIndex = Random.Range(0, GameManager.Instance.DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()].Corridors.Count);
             room = Instantiate
                 (
-                GameManager.Instance
-                .DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()]
-                .Corridors[randomIndex], 
+                GameManager.Instance.DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()].Corridors[randomIndex], 
                 transform.position, 
                 transform.rotation, 
                 transform
