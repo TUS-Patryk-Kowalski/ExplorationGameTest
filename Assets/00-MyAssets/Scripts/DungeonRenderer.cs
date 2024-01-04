@@ -17,14 +17,20 @@ public class DungeonRenderer : MonoBehaviour
         {
             foreach(Transform child in dungeonController.gameObject.transform)
             {
-                child.gameObject.SetActive(true);
+                if (child.gameObject.activeSelf == false)
+                {
+                    child.gameObject.SetActive(true);
+                }
             }
         }
         else
         {
             foreach (Transform child in dungeonController.gameObject.transform)
             {
-                child.gameObject.SetActive(false);
+                if (child.gameObject.activeSelf == true)
+                {
+                    child.gameObject.SetActive(false);
+                }
             }
         }
     }

@@ -13,8 +13,10 @@ public class ConnectionPointData : MonoBehaviour
 {
     public CardinalDirection cardinalDirection;
     public ConnectionSize connectionSize;
-    public bool isPartOfGroundedRoom;
+    public bool isStatic;
+    public Vector3 localOffset;
 
+    
     public void UpdateDirection()
     {
         // Get the snapped Y rotation of the object
@@ -40,5 +42,9 @@ public class ConnectionPointData : MonoBehaviour
                 // Handle any other snappedY values here if needed
                 break;
         }
+    }
+    public void UpdateOffset()
+    {
+
     }
 }

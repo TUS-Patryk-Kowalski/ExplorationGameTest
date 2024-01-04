@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DungeonController : MonoBehaviour
@@ -10,49 +11,44 @@ public class DungeonController : MonoBehaviour
     public bool generatedDungeon;
 
     private DungeonEntrance dungeonEntranceScript;
+    private DungeonRenderer dungeonRendererScript;
+
     public void OnEnable()
     {
         dungeonEntranceScript = GetComponentInParent<DungeonEntrance>();
+        dungeonRendererScript = GetComponent<DungeonRenderer>();
     }
 
     public void GenerateDungeon()
     {
+        int randomIndex;
+        int randomChance;
+        GameObject room;
+        Quaternion randomRotation;
+
+        List<Transform> floatingPointList = new List<Transform>();
+        List<Transform> staticPointList = new List<Transform>();
+
         // Code for generating the dungeon
 
         // A. Select a random Starting Room from the StartingRoom List
-        int randomIndex;
-        randomIndex = Random.Range
-            (
-            0,
-            GameManager.Instance.DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()].StartingRooms.Count
-            );
+        randomIndex = Random.Range(0, GameManager.Instance.DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()].StartingRooms.Count);
 
         //    Instantiate the selected StartingRoom
         //    Move it to the dungeon's dungeonStart GameObject's position
         //    Make the room a child of the dungeonStart object
-        GameObject room;
-        room = Instantiate
-            (
-            GameManager.Instance.DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()].StartingRooms[randomIndex],
-            transform.position,
-            transform.rotation,
-            transform
-            );
+        room = Instantiate(GameManager.Instance.DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()].StartingRooms[randomIndex], transform.position, transform.rotation, transform);
         //    Go to step B
 
         // B. Rotate the StartingRoom randomly,
-        Quaternion randomRotation;
-        randomRotation = Quaternion.Euler(0, Random.Range(0, 4) * 90.0f, 0);
-
-        room.transform.rotation = randomRotation;
-
         //    Snap it to the closest 90 degree angle
-        SnapRoomRotation(room);
+        randomRotation = Quaternion.Euler(0, Random.Range(0, 4) * 90.0f, 0);
+        room.transform.rotation = randomRotation;
         //    Go to step C
 
         // C. Update the cardinalDirection value for each of the room's connection points
         //    Loop through all the child Objects of the room (might update later if the room will have decorations parented to it too)
-        foreach(Transform snapPoint in room.transform)
+        foreach (Transform snapPoint in room.transform)
         {
             // Get the ConnectionPointData script in the object
             ConnectionPointData dataScript = snapPoint.GetComponent<ConnectionPointData>();
@@ -62,33 +58,24 @@ public class DungeonController : MonoBehaviour
             {
                 continue;
             }
-            // Else if it has the script, tell it to update the cardinalDirection variable
+            // Else if it has the script, tell the script to update the cardinalDirection variable
             dataScript.UpdateDirection();
+            // Add the points to the grounded points list (since starting room is always grounded)
+            staticPointList.Add(snapPoint);
         }
         //    Go to step D
 
         // D. Pick step D1 or D2 at random
-        int random;
-        random = Random.Range(0, 100);
+        randomChance = Random.Range(0, 100);
 
-        if (random <= roomToCorridorPercentage)
+        if (randomChance <= roomToCorridorPercentage)
         {
             // - D1. Create a Room from the Room List
             //       Make the room a child of the dungeonStart object
             //       set the Room to a GameObject variable
-            randomIndex = Random.Range
-                (
-                0,
-                GameManager.Instance.DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()].NormalRooms.Count
-                );
+            randomIndex = Random.Range(0, GameManager.Instance.DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()].NormalRooms.Count);
 
-            room = Instantiate
-                (
-                GameManager.Instance.DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()].NormalRooms[randomIndex], 
-                transform.position, 
-                transform.rotation, 
-                transform
-                );
+            room = Instantiate(GameManager.Instance.DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()].NormalRooms[randomIndex], transform.position, transform.rotation, transform);
         }
         else
         {
@@ -96,26 +83,18 @@ public class DungeonController : MonoBehaviour
             //       Make the Corridor a child of the dungeonStart object
             //       Set the Corridor to a GameObject variable
             randomIndex = Random.Range(0, GameManager.Instance.DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()].Corridors.Count);
-            room = Instantiate
-                (
-                GameManager.Instance.DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()].Corridors[randomIndex], 
-                transform.position, 
-                transform.rotation, 
-                transform
-                );
+
+            room = Instantiate(GameManager.Instance.DungeonPrefabSets[dungeonEntranceScript.dungeonRarity.GetHashCode()].Corridors[randomIndex], transform.position, transform.rotation, transform);
         }
         //    Go to step E
 
         // E. Rotate the Room/Corridor randomly
+        //    Snap it to the closest 90 degree angle
         randomRotation = Quaternion.Euler(0, Random.Range(0, 4) * 90.0f, 0);
         room.transform.rotation = randomRotation;
-
-        //    Snap it to the closest 90 degree angle
-        SnapRoomRotation(room);
         //    Go to step F
 
         // F. Update the cardinalDirection value for each of the room's connection points
-        List<Transform> connectionPointList = new List<Transform>();
         foreach (Transform snapPoint in room.transform)
         {
             // Get the ConnectionPointData script in the object
@@ -128,65 +107,56 @@ public class DungeonController : MonoBehaviour
             }
             // Else if it has the script, tell it to update the cardinalDirection variable
             dataScript.UpdateDirection();
-            // Add the point to the list for use in the next step
-            connectionPointList.Add(snapPoint);
+            // Add the point to the ungrounded points list for use in the next step
+            floatingPointList.Add(snapPoint);
         }
         //    Go to step G
 
-        // G. Using the GameObject variable, find all the connection data points of the room
-        //    Add them to a list (List1)
+        // G. Move the room to connect with a grounded room
+        //    Go through the list and make sure the local positions of the poinst are set
+        foreach (Transform floatingPoint in floatingPointList)
+        {
+            // Grab a reference to the ConncetionPointData
+            ConnectionPointData pointData = floatingPoint.GetComponent<ConnectionPointData>();
+
+            if (pointData.localOffset == Vector3.zero)
+            {
+                pointData.UpdateOffset();
+            }
+            else
+            {
+                continue;
+            }
+        }
+
+        //    Pick a random point from both the floating room, and any of the unfinished static points
+
+        //    Move the Room's/Corridor's point so that both selected points are in the same global position
+        //    Move the floating room so that the point is back to its original local position
         //    Go to step H
 
-        // H. Create a second list (List2)
-        //    Add all the other incomplete but grounded connection points that also face the correct direction (opposite direction to the selected point from List1) and are also the right size
+        // H. OverlapBox to ensure the room doesnt intersect another room in its current position,
         //    Go to step I
 
-        // I. Pick a random point from both lists
-        //    Move the Room/Corridor so that both selected points are in the same global position
-        //    Remove the point selected from List2
-        //    Go to step J
-
-        // J. OverlapBox to ensure the room doesnt intersect another room in its current position,
-        //    Go to step K
-
-        // K. if the room Overlaps, do K1, if it doesn't overlap, do K2
+        // I. if the room Overlaps, do I1, if it doesn't overlap, do I2
         //
-        // - K1. Return to step I
-        //       but if it fails a set number of times;
-        //          Destroy the Room/Corridor, and go back to step D instead
+        // - I1. Destroy the Room/Corridor, and go back to step D instead
         //
-        // - K2. Set all of the room's connections as grounded
+        // - I2. Set all of the room's connections as grounded
         //       Reduce roomsToSpawn by 1 if the prefab is a room, not a corridor
+        //       Destroy the point that got connected since they are no longer needed
         //       Go back to Step D if roomsToSpawn is not 0
 
-        // L. Create the specified number of bonus rooms
+        // J. Create the specified number of bonus rooms
 
-        // M. create a boss room
+        // K. create a boss room
 
-        // N. create a return portal room connected to the boss room
+        // L. create a return portal room connected to the boss room
 
+        dungeonRendererScript.DungeonRenderUpdate();
         generatedDungeon = true;
         readyToGenerate = false;
-    }
 
-    public static void SnapRoomRotation(GameObject targetObject)
-    {
-        if (targetObject.transform.rotation.y != 0 
-            || targetObject.transform.rotation.y != 90 
-            || targetObject.transform.rotation.y != 180 
-            || targetObject.transform.rotation.y != 270)
-        {
-            // Get the current rotation of the target object
-            Vector3 currentRotation = targetObject.transform.rotation.eulerAngles;
-
-            // Round the Y Euler angle to the nearest multiple of 90 degrees
-            float snappedY = Mathf.Round(currentRotation.y / 90.0f) * 90.0f;
-
-            // Create a new Quaternion with the snapped Y rotation
-            Quaternion snappedRotation = Quaternion.Euler(currentRotation.x, snappedY, currentRotation.z);
-
-            // Apply the snapped rotation to the target object
-            targetObject.transform.rotation = snappedRotation;
-        }
+        Debug.Log("Dungeon has completed generation");
     }
 }

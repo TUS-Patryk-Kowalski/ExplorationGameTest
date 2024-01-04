@@ -33,11 +33,21 @@ public class DungeonEntrance : MonoBehaviour
 
     private void Update()
     {
-        if(playerInTrigger && Keyboard.current.eKey.wasPressedThisFrame && dungeonController.generatedDungeon)
+        if(playerInTrigger && Keyboard.current.eKey.wasPressedThisFrame)
         {
-            dungeonController.enabled = true;
-            dungeonRenderer.DungeonRenderUpdate();
-            GameManager.Instance.MovePlayer(dungeonController.gameObject.transform, new Vector3(0, 2, 0));
+            // Check if the dungeon is ready to generate and is not yet generated
+            if (dungeonController.readyToGenerate == true && dungeonController.generatedDungeon == false)
+            {
+                dungeonController.enabled = true;
+                // Generate the dungeon
+                dungeonController.GenerateDungeon();
+            }
+            
+            if (dungeonController.generatedDungeon)
+            {
+                dungeonRenderer.DungeonRenderUpdate();
+                GameManager.Instance.MovePlayer(dungeonController.gameObject.transform, new Vector3(0, 2, 0));
+            }
         }
     }
 
@@ -46,12 +56,7 @@ public class DungeonEntrance : MonoBehaviour
         // Check if the collision is the player
         if (other.gameObject.CompareTag("Player"))
         {
-            // Check if the dungeon is ready to generate and is not yet generated
-            if (dungeonController.readyToGenerate == true && dungeonController.generatedDungeon == false)
-            {
-                // Generate the dungeon
-                dungeonController.GenerateDungeon();
-            }
+            
 
             playerInTrigger = true;
             entranceParticles.gameObject.SetActive(true);

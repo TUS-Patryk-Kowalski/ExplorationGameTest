@@ -48,7 +48,8 @@ MonoBehaviour:
   connectionSize:
     connectionWidth: 3
     connectionHeight: 4
-  isPartOfGroundedRoom: 0
+  isStatic: 1
+  localOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &6697574338448907227
 GameObject:
   m_ObjectHideFlags: 0
