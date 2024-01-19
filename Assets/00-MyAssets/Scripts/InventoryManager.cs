@@ -45,6 +45,7 @@ public class RaritySpritePair
 public class InventoryManager : MonoBehaviour
 {
     public int startingInventorySlots;
+    public GameObject inventorySlotPrefab;
 
     public List<InventoryItemData> hotbarSlots = new List<InventoryItemData>();
     public List<RaritySpritePair> rarityToSprite = new List<RaritySpritePair>();
@@ -53,9 +54,11 @@ public class InventoryManager : MonoBehaviour
     {
         for (int i = 0; i < startingInventorySlots; i++)
         {
+            Instantiate(inventorySlotPrefab, GameManager.Instance.inventoryUI.transform);
             hotbarSlots.Add(new InventoryItemData());
             hotbarSlots[i].itemSlotGO = GameManager.Instance.inventoryUI.transform.GetChild(i).gameObject;
         }
+        // Add a hotbar selection display object to the
     }
 
     public void AddItemToInventory(Item itemToAdd)

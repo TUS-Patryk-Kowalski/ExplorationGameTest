@@ -96,6 +96,7 @@ public class DungeonRoomSet
     public List<GameObject> BonusRooms = new List<GameObject>();
     public List<GameObject> BossRooms = new List<GameObject>();
     public List<GameObject> ReturnPortalRoom = new List<GameObject>();
+    public List<GameObject> ConnectionCaps = new List<GameObject>();
 }
 
 public static class ListExtensions

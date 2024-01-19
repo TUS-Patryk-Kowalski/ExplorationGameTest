@@ -13,6 +13,9 @@ public class DungeonController : MonoBehaviour
     private DungeonEntrance dungeonEntranceScript;
     private DungeonRenderer dungeonRendererScript;
 
+    public List<Transform> floatingPointList = new List<Transform>();
+    public List<Transform> staticPointList = new List<Transform>();
+
     public void OnEnable()
     {
         dungeonEntranceScript = GetComponentInParent<DungeonEntrance>();
@@ -21,13 +24,11 @@ public class DungeonController : MonoBehaviour
 
     public void GenerateDungeon()
     {
+        int index = 0;
         int randomIndex;
         int randomChance;
         GameObject room;
         Quaternion randomRotation;
-
-        List<Transform> floatingPointList = new List<Transform>();
-        List<Transform> staticPointList = new List<Transform>();
 
         // Code for generating the dungeon
 
@@ -88,13 +89,7 @@ public class DungeonController : MonoBehaviour
         }
         //    Go to step E
 
-        // E. Rotate the Room/Corridor randomly
-        //    Snap it to the closest 90 degree angle
-        randomRotation = Quaternion.Euler(0, Random.Range(0, 4) * 90.0f, 0);
-        room.transform.rotation = randomRotation;
-        //    Go to step F
-
-        // F. Update the cardinalDirection value for each of the room's connection points
+        // E. Update the cardinalDirection value for each of the room's connection points
         foreach (Transform snapPoint in room.transform)
         {
             // Get the ConnectionPointData script in the object
@@ -110,9 +105,9 @@ public class DungeonController : MonoBehaviour
             // Add the point to the ungrounded points list for use in the next step
             floatingPointList.Add(snapPoint);
         }
-        //    Go to step G
+        //    Go to step F
 
-        // G. Move the room to connect with a grounded room
+        // F. Move the room to connect with a grounded room
         //    Go through the list and make sure the local positions of the poinst are set
         foreach (Transform floatingPoint in floatingPointList)
         {
@@ -129,29 +124,72 @@ public class DungeonController : MonoBehaviour
             }
         }
 
-        //    Pick a random point from both the floating room, and any of the unfinished static points
+        //    Pick a random point from the static point list, and find a point with the opposite direction, and same size
+        staticPointList.Shuffle();
 
-        //    Move the Room's/Corridor's point so that both selected points are in the same global position
-        //    Move the floating room so that the point is back to its original local position
+        Transform staticPoint = staticPointList[index];
+        ConnectionPointData staticPointData = staticPoint.GetComponent<ConnectionPointData>();
+
+        floatingPointList.Shuffle();
+
+        foreach (Transform floatingPoint in floatingPointList)
+        {
+            ConnectionPointData floatingPointData = floatingPoint.GetComponent<ConnectionPointData>();
+
+            if (staticPointData.connectionSize == floatingPointData.connectionSize)
+            {
+            redoRotationCheck:
+                if (staticPointData.transform.rotation != new Quaternion(0, floatingPointData.transform.rotation.y + 180, 0, 0))
+                {
+                    // rotate the room so the points can match up
+                    room.transform.rotation = new Quaternion(0, room.transform.rotation.y + 90, 0, 0);
+
+                    // Update connectionPointData to reflect this rotation change
+                    floatingPointData.UpdateDirection();
+
+                    goto redoRotationCheck;
+                }
+                else if(staticPointData.transform.rotation == new Quaternion(0, floatingPointData.transform.rotation.y + 180, 0, 0))
+                {
+                    floatingPointData.localOffset = floatingPoint.localPosition;
+
+                    // Move the Room's/Corridor's floating point to the static point's global position
+                    // floatingPoint.transform.position = staticPoint.transform.position;
+
+                    // Move the floating room so that the floating point is back to its original local position
+                    // room.GetComponentInParent<Transform>().position = floatingPoint.position + floatingPointData.localOffset;
+                    break;
+                }
+            }
+            else
+            {
+                continue;
+            }
+        }
+        
+        
+        //    Go to step G
+
+        // G. OverlapBox to ensure the room doesnt intersect another room in its current position,
+        //    (The room's mesh might be useful for figuring out the size of the room for this step)
         //    Go to step H
 
-        // H. OverlapBox to ensure the room doesnt intersect another room in its current position,
-        //    Go to step I
-
-        // I. if the room Overlaps, do I1, if it doesn't overlap, do I2
+        // H. if the room Overlaps, do H1, if it doesn't overlap, do H2
         //
-        // - I1. Destroy the Room/Corridor, and go back to step D instead
+        // - H1. Destroy the Room/Corridor, and go back to step D instead
         //
-        // - I2. Set all of the room's connections as grounded
+        // - H2. Set all of the room's connections as grounded
         //       Reduce roomsToSpawn by 1 if the prefab is a room, not a corridor
         //       Destroy the point that got connected since they are no longer needed
         //       Go back to Step D if roomsToSpawn is not 0
 
-        // J. Create the specified number of bonus rooms
+        // I. Create the specified number of bonus rooms dungeon rarity is 
 
-        // K. create a boss room
+        // J. create a boss room from the list of the dungeon's rarity
 
-        // L. create a return portal room connected to the boss room
+        // K. create a return portal room connected to the boss room from the list of the dungeon's rarity
+
+        // L. Cap off any of the remianing incomplete connections using objects from the ConnectionCaps list for the specified Dungeon Rarity
 
         dungeonRendererScript.DungeonRenderUpdate();
         generatedDungeon = true;
